@@ -1,0 +1,5 @@
+---
+applications:
+- name: hl7-fhir-validator
+  host: hl7-fhir-validator
+  memory: 128M

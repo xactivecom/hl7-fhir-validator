@@ -1,0 +1,25 @@
+{
+  "name": "fhir-validator",
+  "version": "0.1.1",
+  "description": "HL7 FHIR validation tester based on FHIR JSON schema.",
+  "main": "app.js",
+  "scripts": {
+    "start": "NODE_ENV=production node .",
+    "dev": "DEBUG=hcp-server* NODE_ENV=development nodemon . --use_strict ."
+  },
+  "dependencies": {
+    "express": "^4.16.3",
+    "jsen": "^0.6.6",
+    "winston": "2.4.2"
+  },
+  "devDependencies": {
+    "nodemon": "^1.15.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xactivecom/hl7-fhir-validator.git"
+  },
+  "license": "MIT",
+  "author": "Stuart Thompson",
+  "email": "stuart@xactive.com"
+}

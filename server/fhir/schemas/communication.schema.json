@@ -1,0 +1,653 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "$ref": "#/definitions/Communication",
+  "description": "see http://hl7.org/fhir/json.html#schema for information about the FHIR Json Schemas",
+  "definitions": {
+    "Address": {
+      "description": "Address profiled for the MOHLTC ICON project.",
+      "properties": {
+        "use": {
+          "description": "The purpose of this address.",
+          "enum": [
+            "home",
+            "work",
+            "temp",
+            "old"
+          ],
+          "type": "string"
+        },
+        "extension": {
+          "description": "Extensions to the address.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Address_Extension"
+          }
+        },
+        "city": {
+          "description": "The name of the city, town, village or other community or delivery center.",
+          "type": "string",
+          "requiredMessage": "Address.city is required"
+        },
+        "state": {
+          "description": "Sub-unit of a country with limited sovereignty in a federally organized country. A code may be used if codes are in common use (i.e. US 2 letter state codes).",
+          "type": "string",
+          "requiredMessage": "Address.state is required"
+        },
+        "postalCode": {
+          "description": "A postal code designating a region defined by the postal service.",
+          "type": "string",
+          "requiredMessage": "Address.postalCode is required"
+        }
+      },
+      "required": [
+        "city",
+        "state",
+        "postalCode"
+      ]
+    },
+
+    "Address_Extension": {
+      "description": "Address_Extension profiled for the MOHLTC ICON project.",
+      "properties": {
+        "url": {
+          "type": "string",
+          "requiredMessage": "Address_Extension.url is required"
+        },
+        "valueString": {
+          "type": "string",
+          "requiredMessage": "Address_Extension.valueString is required"
+        }
+      },
+      "required": [
+        "url",
+        "valueString"
+      ]
+    },
+
+    "Attachment": {
+      "description": "Attachment profiled for the MOHLTC ICON project.",
+      "properties": {
+        "contentType": {
+          "description": "Identifies the type of the data in the attachment and allows a method to be chosen to interpret or render the data. Includes mime type parameters such as charset where appropriate.",
+          "type": "string",
+          "pattern": "[^\\s]+([\\s]?[^\\s]+)*",
+          "requiredMessage": "attachment.contentType is required"
+        },
+        "data": {
+          "description": "The actual data of the attachment - a sequence of bytes. In XML, represented using base64.",
+          "type": "string",
+          "requiredMessage": "attachment.data is required"
+        },
+        "hash": {
+          "description": "The calculated hash of the data using SHA-1. Represented using base64.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "contentType",
+        "data"
+      ]
+    },
+
+    "CodeableConcept": {
+      "description": "CodeableConcept profiled for the MOHLTC ICON project.",
+      "properties": {
+        "coding": {
+          "description": "A reference to a code defined by a terminology system.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Coding"
+          }
+        }
+      }
+    },
+    "Coding": {
+      "description": "Coding profiled for the MOHLTC ICON project.",
+      "properties": {
+        "system": {
+          "description": "The identification of the code system that defines the meaning of the symbol in the code.",
+          "type": "string",
+          "requiredMessage": "coding.system is required"
+        },
+        "code": {
+          "description": "A symbol in syntax defined by the system. The symbol may be a predefined code or an expression in a syntax defined by the coding system (e.g. post-coordination).",
+          "type": "string",
+          "pattern": "[^\\s]+([\\s]?[^\\s]+)*",
+          "requiredMessage": "coding.code is required"
+        },
+        "display": {
+          "description": "A representation of the meaning of the code in the system, following the rules of the system.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "system",
+        "code"
+      ]
+    },
+
+    "Communication": {
+      "description": "Communication profiled for the MOHLTC ICON project.",
+      "properties": {
+        "resourceType": {
+          "description": "This is a Communication resource",
+          "type": "string",
+          "enum": [
+            "Communication"
+          ]
+        },
+        "contained": {
+          "description": "These resources do not have an independent existence apart from the resource that contains them - they cannot be identified independently, and nor can they have their own independent transaction scope.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ResourceList"
+          }
+        },
+        "identifier": {
+          "description": "Identifiers associated with this Communication that are defined by business processes and/ or used to refer to it when a direct URL reference to the resource itself is not appropriate.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Communication_Identifier"
+          },
+          "minItems": 1,
+          "maxItems": 1
+        },
+        "status": {
+          "description": "The status of the transmission.",
+          "enum": [
+            "in-progress",
+            "completed",
+            "suspended",
+            "rejected",
+            "failed"
+          ],
+          "type": "string"
+        },
+        "subject": {
+          "description": "The patient who was the focus of this communication.",
+          "$ref": "#/definitions/Reference"
+        },
+        "sent": {
+          "description": "The time when this communication was sent.",
+          "type": "string",
+          "pattern": "-?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\\.[0-9]+)?(Z|(\\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?"
+        },
+        "received": {
+          "description": "The time when this communication arrived at the destination.",
+          "type": "string",
+          "pattern": "-?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\\.[0-9]+)?(Z|(\\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?"
+        },
+        "sender": {
+          "description": "The entity (e.g. person, organization, clinical information system, or device) which was the source of the communication.",
+          "$ref": "#/definitions/Reference"
+        },
+        "recipient": {
+          "description": "The entity (e.g. person, organization, clinical information system, or device) which was the target of the communication.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Reference"
+          }
+        },
+        "reason": {
+          "description": "The reason or justification for the communication.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CodeableConcept"
+          }
+        },
+        "payload": {
+          "description": "Text, attachment(s), or resource(s) that was communicated to the recipient.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Communication_Payload"
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "resourceType",
+        "identifier",
+        "subject",
+        "sender",
+        "recipient",
+        "payload"
+      ]
+    },
+    "Communication_Identifier": {
+      "description": "Submission identifier profiled for the MOHLTC ICON project.",
+      "properties": {
+        "system": {
+          "description": "Establishes the namespace in which set of possible id values is unique.",
+          "type": "string",
+          "requiredMessage": "identifier.system is required"
+        },
+        "value": {
+          "description": "The portion of the identifier typically relevant to the user and which is unique within the context of the system.",
+          "type": "string",
+          "requiredMessage": "Communication.identifier.value is required",
+          "format": "validateSubmissionId",
+          "invalidMessage": "invalid Communication.identifier.value"
+        }
+      },
+      "required": [
+        "system",
+        "value"
+      ]
+    },
+    "Communication_Payload": {
+      "description": "Communication_Payload profiled for the MOHLTC ICON project.",
+      "properties": {
+        "contentString": {
+          "description": "A communicated content (or for multi-part communications, one portion of the communication).",
+          "type": "string"
+        },
+        "contentAttachment": {
+          "description": "A communicated content (or for multi-part communications, one portion of the communication).",
+          "$ref": "#/definitions/Attachment"
+        },
+        "contentReference": {
+          "description": "A communicated content (or for multi-part communications, one portion of the communication).",
+          "$ref": "#/definitions/Reference"
+        }
+      }
+    },
+
+    "ContactPoint": {
+      "description": "ContactPoint profiled for the MOHLTC ICON project.",
+      "oneOf": [
+        {
+          "properties": {
+            "system": {
+              "enum": [
+                "email"
+              ],
+              "type": "string",
+              "format": "email",
+              "invalidMessage": "Invalid telecom email",
+              "requiredMessage": "telecom.system is required"
+            },
+            "value": {
+              "description": "The actual contact point details, in a form that is meaningful to the designated communication system (i.e. phone number or email address).",
+              "type": "string",
+              "minLength": 5,
+              "maxLength": 255,
+              "invalidMessage": "Invalid email format, or exceeds field size (255)",
+              "requiredMessage": "telecom.value is required"
+            }
+          },
+          "required": [
+            "system",
+            "value"
+          ]
+        },
+        {
+          "properties": {
+            "system": {
+              "enum": [
+                "phone"
+              ],
+              "type": "string",
+              "invalidMessage": "Invalid telecom phone",
+              "requiredMessage": "telecom.system is required"
+            },
+            "value": {
+              "description": "The actual contact point details, in a form that is meaningful to the designated communication system.",
+              "type": "string",
+              "minLength": 7,
+              "maxLength": 100,
+              "invalidMessage": "Invalid phone format, or exceeds field size (100)",
+              "requiredMessage": "telecom.value is required"
+            },
+            "use": {
+              "description": "Identifies the purpose for the contact point.",
+              "enum": [
+                "home",
+                "work",
+                "mobile"
+              ],
+              "type": "string",
+              "invalidMessage": "Invalid telecom use",
+              "requiredMessage": "telecom.use is required"
+            }
+          },
+          "required": [
+            "system",
+            "value",
+            "use"
+          ]
+        }
+      ]
+    },
+
+    "HumanName": {
+      "description": "HumanName profiled for the MOHLTC ICON project.",
+      "properties": {
+        "family": {
+          "description": "The part of a name that links to the genealogy. In some cultures (e.g. Eritrea) the family name of a son is the first name of his father.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "REGEX_HUMAN_NAME",
+            "minLength": 1,
+            "maxLength": 100,
+            "invalidMessage": "Invalid format, or exceeds field size (100)"
+          },
+          "minItems": 1,
+          "requiredMessage": "name.family is required"
+        },
+        "given": {
+          "description": "Given name.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "REGEX_HUMAN_NAME",
+            "minLength": 1,
+            "maxLength": 100,
+            "invalidMessage": "Invalid format, or exceeds field size (100)"
+          },
+          "minItems": 1,
+          "requiredMessage": "name.given is required"
+        }
+      },
+      "required": [
+        "family",
+        "given"
+      ]
+    },
+
+    "Identifier": {
+      "description": "Identifier profiled for the MOHLTC ICON project.",
+      "properties": {
+        "use": {
+          "description": "The purpose of this identifier.",
+          "enum": [
+            "usual",
+            "official",
+            "temp",
+            "secondary"
+          ],
+          "type": "string"
+        },
+        "system": {
+          "description": "Establishes the namespace in which set of possible id values is unique.",
+          "type": "string",
+          "requiredMessage": "identifier.system is required"
+        },
+        "value": {
+          "description": "The portion of the identifier typically relevant to the user and which is unique within the context of the system.",
+          "type": "string",
+          "requiredMessage": "identifier.value is required"
+        }
+      },
+      "required": [
+        "system",
+        "value"
+      ]
+    },
+
+    "Immunization": {
+      "description": "Immunization profiled for the MOHLTC ICON project.",
+      "properties": {
+        "resourceType": {
+          "description": "This is a Immunization resource",
+          "type": "string",
+          "enum": [
+            "Immunization"
+          ]
+        },
+        "status": {
+          "description": "Indicates the current status of the vaccination event.",
+          "type": "string",
+          "enum": [
+            "completed"
+          ],
+          "invalidMessage": "Immunization.status must be 'completed'"
+        },
+        "date": {
+          "description": "Date vaccine administered or was to be administered.",
+          "type": "string",
+          "pattern": "-?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\\.[0-9]+)?(Z|(\\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?"
+        },
+        "vaccineCode": {
+          "description": "Vaccine that was administered or was to be administered.",
+          "$ref": "#/definitions/CodeableConcept"
+        },
+        "patient": {
+          "description": "The patient who either received or did not receive the immunization.",
+          "$ref": "#/definitions/Reference"
+        },
+        "wasNotGiven": {
+          "description": "Indicates if the vaccination was or was not given.",
+          "type": "boolean"
+        },
+        "reported": {
+          "description": "Indicates if the vaccination was self-reported.",
+          "type": "boolean",
+          "enum": [
+            true
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "date",
+        "vaccineCode",
+        "patient",
+        "wasNotGiven",
+        "reported"
+      ]
+    },
+
+    "Meta": {
+      "description": "The metadata about a resource. This is content in the resource that is maintained by the infrastructure.",
+      "properties": {
+        "lastUpdated": {
+          "description": "When the resource last changed - e.g. when the version changed.",
+          "type": "string"
+        }
+      }
+    },
+
+    "Organization": {
+      "description": "Organization profiled for the MOHLTC ICON project.",
+      "properties": {
+        "resourceType": {
+          "description": "This is a Organization resource",
+          "type": "string",
+          "enum": [
+            "Organization"
+          ]
+        },
+        "identifier": {
+          "description": "Identifier for the organization that is used to identify the organization across multiple disparate systems.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Identifier"
+          },
+          "maxItems": 1
+        },
+        "name": {
+          "description": "A name associated with the organization.",
+          "type": "string",
+          "format": "REGEX_TITLE_NAME",
+          "maxLength": 250,
+          "invalidMessage": "Invalid format, or exceeds 250 characters"
+        }
+      },
+      "required": [
+        "resourceType",
+        "name"
+      ]
+    },
+
+    "Patient": {
+      "description": "Patient profiled for the MOHLTC ICON project.",
+      "properties": {
+        "resourceType": {
+          "description": "This is a Patient resource",
+          "type": "string",
+          "enum": [
+            "Patient"
+          ]
+        },
+        "identifier": {
+          "description": "An identifier for this patient.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Identifier"
+          },
+          "minItems": 1,
+          "maxItems": 2
+        },
+        "name": {
+          "description": "A name associated with the organization.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/HumanName"
+          },
+          "maxItems": 1
+        },
+        "gender": {
+          "description": "Administrative Gender - the gender that the patient is considered to have for administration and record keeping purposes.",
+          "enum": [
+            "male",
+            "female",
+            "other",
+            "unknown"
+          ],
+          "type": "string",
+          "invalidMessage": "Invalid gender format",
+          "requiredMessage": "Patient.gender is required"
+        },
+        "birthDate": {
+          "description": "The date of birth for the individual.",
+          "type": "string",
+          "pattern": "-?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?",
+          "invalidMessage": "Invalid date format",
+          "requiredMessage": "Patient.birthDate is required"
+        },
+        "address": {
+          "description": "Addresses for the individual.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Address"
+          },
+          "maxItems": 1
+        },
+        "contact": {
+          "description": "A contact party (e.g. guardian, partner, friend) for the patient.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Patient_Contact"
+          },
+          "maxItems": 1
+        }
+      },
+      "required": [
+        "resourceType",
+        "name",
+        "gender",
+        "birthDate"
+      ]
+    },
+
+    "Patient_Contact": {
+      "description": "Patient_Contact profiled for the MOHLTC ICON project.",
+      "properties": {
+        "organization": {
+          "description": "Organization on behalf of which the contact is acting or for which the contact is working.",
+          "$ref": "#/definitions/Reference",
+          "requiredMessage": "Patient_Contact.organization is required"
+        }
+      },
+      "required": [
+        "organization"
+      ]
+    },
+
+    "Reference": {
+      "description": "Reference profiled for the MOHLTC ICON project..",
+      "properties": {
+        "reference": {
+          "description": "A reference to a location at which the other resource is found.",
+          "type": "string",
+          "invalidMessage": "reference cannot resolved",
+          "requiredMessage": "reference is required"
+        },
+        "identifier": {
+          "description": "An identifier for the other resource.",
+          "$ref": "#/definitions/Identifier"
+        },
+        "display": {
+          "description": "Plain text narrative that identifies the resource in addition to the resource reference.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "reference"
+      ]
+    },
+
+    "RelatedPerson": {
+      "description": "RelatedPerson profile for the MOHLTC ICON project.",
+      "properties": {
+        "resourceType": {
+          "description": "This is a RelatedPerson resource",
+          "type": "string",
+          "enum": [
+            "RelatedPerson"
+          ]
+        },
+        "patient": {
+          "description": "The patient this person is related to.",
+          "$ref": "#/definitions/Reference",
+          "requiredMessage": "RelatedPerson.patient is required"
+        },
+        "relationship": {
+          "description": "The nature of the relationship between a patient and the related person.",
+          "$ref": "#/definitions/CodeableConcept",
+          "requiredMessage": "RelatedPerson.relationship is required"
+        },
+        "name": {
+          "description": "A name associated with the person.",
+          "$ref": "#/definitions/HumanName",
+          "requiredMessage": "RelatedPerson.name is required"
+        },
+        "telecom": {
+          "description": "A contact detail for the person, e.g. a telephone number or an email address.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ContactPoint"
+          },
+          "minItems": 1,
+          "maxItems": 3,
+          "requiredMessage": "RelatedPerson.telecom is required"
+        }
+      },
+      "required": [
+        "resourceType",
+        "patient",
+        "relationship",
+        "name",
+        "telecom"
+      ]
+    },
+
+    "ResourceList": {
+      "oneOf": [
+        {
+          "$ref": "#/definitions/Immunization"
+        },
+        {
+          "$ref": "#/definitions/Organization"
+        },
+        {
+          "$ref": "#/definitions/Patient"
+        },
+        {
+          "$ref": "#/definitions/RelatedPerson"
+        }
+      ]
+    }
+  }
+}

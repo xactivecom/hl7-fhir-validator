@@ -1,0 +1,169 @@
+{
+  "resourceType": "Communication",
+  "meta": {
+    "lastUpdated": "2018-03-21T15:50:10.214Z"
+  },
+  "contained": [
+    {
+      "resourceType": "Patient",
+      "id": "Patient/1",
+      "name": [
+        {
+          "use": "official",
+          "family": [
+            "Reece"
+          ],
+          "given": [
+            "Alice"
+          ]
+        }
+      ],
+      "gender": "female",
+      "birthDate": "2011-10-19",
+      "identifier": [
+        {
+          "use": "official",
+          "system": "https://ehealthontario.ca/API/FHIR/NamingSystem/ca-on-patient-hcn",
+          "value": "1234567897"
+        }
+      ],
+      "address": [
+        {
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-houseNumber",
+              "valueString": "105"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-streetName",
+              "valueString": "Pepperman"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-streetNameType",
+              "valueString": "Cres"
+            }
+          ],
+          "use": "home",
+          "line": [
+            ""
+          ],
+          "city": "Brampton",
+          "state": "Ontario",
+          "postalCode": "L6Y2N3"
+        }
+      ]
+    },
+    {
+      "resourceType": "RelatedPerson",
+      "id": "RelatedPerson/1",
+      "patient": {
+        "reference": "#Patient/1"
+      },
+      "relationship": {
+        "coding": [
+          {
+            "system": "http://hl7.org/fhir/v3/RoleCode",
+            "code": "GUARD"
+          }
+        ]
+      },
+      "name": {
+        "family": [
+          "Reece"
+        ],
+        "given": [
+          "Marian"
+        ]
+      },
+      "telecom": [
+        {
+          "system": "phone",
+          "value": "999-999-9999",
+          "use": "home"
+        }
+      ]
+    },
+    {
+      "resourceType": "Organization",
+      "id": "Organization/2",
+      "identifier": [
+        {
+          "system": "https://ehealthontario.ca/API/FHIR/NamingSystem/ca-on-panorama-phu-id",
+          "value": "14"
+        }
+      ],
+      "name": "Peel Public Health"
+    },
+    {
+      "resourceType": "Immunization",
+      "id": "Immunization/1",
+      "status": "completed",
+      "date": "2018-02-11",
+      "_date": {
+        "extension": [
+          {
+            "url": "https://wsgateway.prod.ehealthontario.ca/API/FHIR/Immunizations/v1/StructureDefinition/ca-on-estimated",
+            "valueBoolean": false
+          }
+        ]
+      },
+      "vaccineCode": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "419550004",
+            "display": "Measles + Mumps + Rubella + Varicella"
+          }
+        ],
+        "text": "Measles + Mumps + Rubella + Varicella"
+      },
+      "patient": {
+        "reference": "#Patient/1"
+      },
+      "wasNotGiven": false,
+      "reported": true,
+      "lotNumber": "",
+      "expirationDate": "",
+      "note": [
+        {
+          "text": ""
+        }
+      ],
+      "location": {
+        "display": "Canada, Ontario"
+      }
+    }
+  ],
+  "identifier": [
+    {
+      "system": "https://ehealthontario.ca/API/FHIR/NamingSystem/ca-on-panorama-imm-submission-id",
+      "value": "YAHTZEE001"
+    }
+  ],
+  "sender": {
+    "reference": "#RelatedPerson/1"
+  },
+  "recipient": [
+    {
+      "reference": "#Organization/2"
+    }
+  ],
+  "payload": [
+    {
+      "contentReference": {
+        "reference": "#Immunization/1"
+      }
+    }
+  ],
+  "status": "completed",
+  "sent": "2018-03-21T15:50:10.230Z",
+  "received": "2018-03-21T15:50:10.230Z",
+  "subject": {
+    "reference": "#Patient/1"
+  },
+  "reason": [
+    {
+      "text": "Letter From PHU"
+    }
+  ]
+}
